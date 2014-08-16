@@ -1,1 +1,6 @@
+.vagrant
+
 aws.yml
+salt/pillar/salt/cloud.sls
+
+*.slsc
