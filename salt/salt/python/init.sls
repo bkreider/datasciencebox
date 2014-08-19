@@ -3,6 +3,9 @@ include:
   - zsh.ubuntu
   - user.ubuntu
 
+build-essential:
+  pkg.installed
+
 base:
   conda.managed:
     - name: /home/ubuntu/envs/base
