@@ -1,5 +1,6 @@
 {% from "salt/package-map.jinja" import pkgs with context %}
-{% set cloud = pillar.get('salt-cloud', {}) -%}
+{% set salt = pillar.get('salt', {}) -%}
+{% set cloud = salt.get('cloud', {}) -%}
 
 python-pip:
   pkg.installed
@@ -27,8 +28,19 @@ salt-cloud:
       - pip: pycrypto
       - pip: crypto
 
+{% for provider in cloud['providers'] %}
+salt-cloud-provider-{{ provider }}:
+  file.managed:
+    - name: /etc/salt/cloud.providers.d/{{ provider }}.conf
+    - template: jinja
+    - source: salt://salt/files/ec2.provider.conf
+    - makedirs: True
+    - context:
+      id: {{ provider }}
+      values: {{ cloud['providers'][provider] }}
+{% endfor %}
+
 {% for cert in cloud['certs'] %}
-{% for type in ['pem'] %}
 cloud-cert-{{ cert }}-pem:
   file.managed:
     - name: /etc/salt/cloud.providers.d/key/{{ cert }}.pem
@@ -38,22 +50,8 @@ cloud-cert-{{ cert }}-pem:
     - user: root
     - group: root
     - mode: 600
-    - defaults:
-      key: {{ cert }}
-      type: {{ type }}
-{% endfor %}
-{% endfor %}
-
-{% for provider in cloud['providers'] %}
-salt-cloud-provider-{{ provider }}:
-  file.managed:
-    - name: /etc/salt/cloud.providers.d/{{ provider }}.conf
-    - template: jinja
-    - source: salt://salt/files/cloud.providers.d.conf
-    - makedirs: True
     - context:
-      id: {{ provider }}
-      values: {{ cloud['providers'][provider] }}
+      value: cloud['certs'][certs]
 {% endfor %}
 
 {% for profile in cloud['profiles'] %}
@@ -61,7 +59,7 @@ salt-cloud-profile-{{ profile }}:
   file.managed:
     - name: /etc/salt/cloud.profiles.d/{{ profile }}.conf
     - template: jinja
-    - source: salt://salt/files/cloud.profiles.d.conf
+    - source: salt://salt/files/ec2.profile.conf
     - makedirs: True
     - context:
       id: {{ profile }}

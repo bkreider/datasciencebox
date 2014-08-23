@@ -1,7 +1,9 @@
 .vagrant
 
 aws.yml
-salt/pillar/salt/cloud.sls
 salt/pillar/s3cmd.sls
+salt/pillar/salt/certs.sls
+salt/pillar/salt/profiles.sls
+salt/pillar/salt/providers.sls
 
 *.slsc

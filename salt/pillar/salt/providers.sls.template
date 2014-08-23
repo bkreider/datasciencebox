@@ -1,0 +1,12 @@
+us-east-1d:
+  provider: ec2
+  ssh_interface: private_ips
+  id: ""
+  key: ""
+  keyname: XXXX_keypair
+  private_key: /etc/salt/cloud.providers.d/key/aws.pem
+  location: us-east-1
+  availability_zone: us-east-1d
+
+  ssh_username: ubuntu
+  # subnetid: ""  # VPC optional

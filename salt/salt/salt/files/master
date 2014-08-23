@@ -1,6 +1,7 @@
 # This file managed by Salt, do not edit by hand!!
 #  Based on salt version 0.17.4 default config
-{% set master = pillar.get('salt-master', {}) -%}
+{% set salt = pillar.get('salt', {}) -%}
+{% set master = salt.get('master', {}) -%}
 {%- macro get_config(configname, default_value) -%}
 {%- if configname in master -%}
 {{ configname }}: {{ master[configname] }}
@@ -796,6 +797,15 @@ win_gitrepos:
 ##########################################
 halite:
   {%- for name, value in master['halite'].iteritems() %}
+  {{ name }}: {{ value }}
+  {%- endfor %}
+{%- endif %}
+
+{% if 'rest_cherrypy' in master -%}
+#####         rest_cherrypy          #####
+##########################################
+rest_cherrypy:
+  {%- for name, value in master['rest_cherrypy'].iteritems() %}
   {{ name }}: {{ value }}
   {%- endfor %}
 {%- endif %}

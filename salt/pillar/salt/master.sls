@@ -1,2 +1,1 @@
-salt-master:
-  auto_accept: True
+auto_accept: True
