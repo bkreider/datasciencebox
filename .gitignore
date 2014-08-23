@@ -2,5 +2,6 @@
 
 aws.yml
 salt/pillar/salt/cloud.sls
+salt/pillar/s3cmd.sls
 
 *.slsc
