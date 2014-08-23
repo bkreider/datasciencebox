@@ -1,1 +1,1 @@
-{{ value }}
+{{ pillar['salt']['cloud']['certs'][cert] }}
