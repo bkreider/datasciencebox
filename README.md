@@ -65,7 +65,7 @@ Fill the `salt/pillar/ipcluster.sls` file, launch the datasciencebox on EC2
 
 1. `sudo salt-call state.sls ipcluster.instances`: creates instances
 2. `sudo salt-call state.sls ipcluster.controller`: start the ipcontroller on the main instance
-3. `sudo salt 'ipengine*' state.sls state.highstate`: start ipengine on worker instances
+3. `sudo salt 'ipengine-*' state.highstate`: start ipengine on worker instances
 
 Everyting is ready, see [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/)
 for more information on how to use it.
