@@ -1,6 +1,5 @@
 include:
   - python
-  - supervisor
 
 engine-pkgs:
   conda.installed:
@@ -17,16 +16,32 @@ ipcontroller-engine.json:
     - makedirs: True
     - user: ubuntu
 
+ipengine.conf:
+  pkg.installed:
+    - name: supervisor
+  file.managed:
+    - name: /etc/supervisor/conf.d/ipengine.conf
+    - source: salt://ipcluster/files/ipengine.conf
+    - template: jinja
+    - makedirs: True
+    - require:
+      - pkg: ipengine.conf
+
+update-supervisor:
+  module.run:
+    - name: supervisord.update
+    - watch:
+      - file: ipengine.conf
+
 {% for pnumber in range(pillar['ipcluster']['nprocesses']) %}
 ipengine-{{ pnumber }}:
   supervisord.running:
     - name: {{ 'ipengine:ipengine_%02d' % pnumber }}
-    - conf_file: /home/ubuntu/supervisor/supervisord.conf
+    - conf_file: /etc/supervisor/supervisord.conf
     - restart: False
-    - update: False
     - user: ubuntu
     - require:
-      - sls: supervisor
       - conda: engine-pkgs
+      - file: ipengine.conf
       - file: ipcontroller-engine.json
 {% endfor %}

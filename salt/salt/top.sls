@@ -4,5 +4,7 @@ base:
     - zsh.ubuntu
     - s3cmd.ubuntu
     - ipnotebook
+    # - salt.master
+    # - salt.cloud
   'ipengine-*':
     - ipcluster.engine

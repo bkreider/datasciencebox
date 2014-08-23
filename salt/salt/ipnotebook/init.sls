@@ -1,6 +1,5 @@
 include:
   - python
-  - supervisor
 
 /home/ubuntu/notebooks:
   file.directory:
@@ -14,12 +13,27 @@ ipython-notebook:
     - require:
       - sls: python
 
+ipnotebook.conf:
+  pkg.installed:
+    - name: supervisor
+  file.managed:
+    - name: /etc/supervisor/conf.d/ipnotebook.conf
+    - source: salt://ipnotebook/files/supervisord.conf
+    - template: jinja
+    - makedirs: True
+    - require:
+      - pkg: ipnotebook.conf
+
+update-supervisor:
+  module.run:
+    - name: supervisord.update
+    - watch:
+      - file: ipnotebook.conf
+
 ipnotebook:
   supervisord.running:
-    - conf_file: /home/ubuntu/supervisor/supervisord.conf
+    - conf_file: /etc/supervisor/supervisord.conf
     - restart: False
-    - user: ubuntu
     - require:
-      - sls: supervisor
-      - conda: ipython-notebook
-      - file: /home/ubuntu/notebooks
+      - file: ipnotebook.conf
+      - module: update-supervisor

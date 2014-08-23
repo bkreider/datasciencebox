@@ -1,6 +1,5 @@
 include:
   - python
-  - supervisor
 
 controller-pkgs:
   conda.installed:
@@ -10,15 +9,30 @@ controller-pkgs:
     - require:
       - sls: python
 
+ipcontroller.conf:
+  pkg.installed:
+    - name: supervisor
+  file.managed:
+    - name: /etc/supervisor/conf.d/ipcontroller.conf
+    - source: salt://ipcluster/files/ipcontroller.conf
+    - template: jinja
+    - makedirs: True
+    - require:
+      - pkg: ipcontroller.conf
+
+update-supervisor:
+  module.run:
+    - name: supervisord.update
+    - watch:
+      - file: ipcontroller.conf
+
 ipcontroller:
   supervisord.running:
-    - conf_file: /home/ubuntu/supervisor/supervisord.conf
+    - conf_file: /etc/supervisor/supervisord.conf
     - restart: False
-    - update: False
-    - user: ubuntu
     - require:
-      - sls: supervisor
-      - conda: controller-pkgs
+      - file: ipcontroller.conf
+      - module: update-supervisor
 
 /srv/salt/ipcluster/files/copied-ipcontroller-engine.json:
   file.copy:

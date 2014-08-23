@@ -4,10 +4,11 @@ import fnmatch
 
 def run():
   '''
-  Returns all the pillars in the pillars list
-  that actually exists
+  Returns all the pillars in the pillars list that actually exists
+
+  Right now it only handles one level of depth
   '''
-  pillars = ['ipcluster', 's3cmd', 'salt']
+  pillars = ['ipcluster', 's3cmd', 'salt', 'ipcluster']
   pillar_path = '/srv/pillar'
 
   matches = []

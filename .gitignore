@@ -1,9 +1,10 @@
+aws.yml
 .vagrant
 
-aws.yml
+*.slsc
 salt/pillar/s3cmd.sls
 salt/pillar/salt/certs.sls
 salt/pillar/salt/profiles.sls
 salt/pillar/salt/providers.sls
 
-*.slsc
+copied-ipcontroller-engine.json

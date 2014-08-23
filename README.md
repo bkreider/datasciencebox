@@ -7,11 +7,10 @@ ready for doing data science.
 - Ubuntu 14.04
 - Python 2.7.8 based on [Anaconda](http://continuum.io/downloads)
 - [IPython notebook](http://ipython.org/notebook.html) running in port 8888
-- [s3cmd](http://s3tools.org/s3cmd), including conf file
 
-And optionally:
+Optional:
 
-- [Luigi](https://github.com/spotify/luigi), including conf file for S3
+- [s3cmd](http://s3tools.org/s3cmd)
 - [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/) cluster creation
 
 ## Creating the box
@@ -29,20 +28,37 @@ to the host.
 
 ### SSH
 
-Vagrant box and EC2 instance are based on ubuntu 14.04 to be consistent between
-them to ssh to a local VM locally you need to use the ubuntu user:
-`vagrant ssh -- -l ubuntu`.
-If running on the EC2 don't need to worry about that, just `vagrant ssh`
+1. Local VM `vagrant ssh -- -l ubuntu`
+2. EC2 instance: `vagrant ssh`
 
-## Configuration
+## Settings
 
 Settings are divided into different files all located at: `salt/pillar/`
+most of them are optional on that case a `settings.sls.template` file is
+provided with the options.
+
+### S3
+
+Copy the `salt/pillar/s3cmd.sls.template` into `salt/pillar/s3cmd.sls`
+and fill the missing values. The `.s3cfg` will be filled with those values
+on the box.
 
 ### Python packages
 
 Change the `salt/salt/python/requirements.txt` file
 
-### IPython.parallel cluster
+## IPython.parallel cluster
+
+**1. Cloud information**
+
+You need to fill the 3 files in the `salt/pillar/salt` directory, each file has
+a template.
+
+1. `certs.sls`: AWS private key used to create the instances; careful with indentation
+1. `providers.sls`: AWS credentials, key_pair name and cert name (#1)
+1. `profiles.sls`: Provider name (#2), image size, base image and security group
+
+**2. Start instances**
 
 Fill the `salt/pillar/ipcluster.sls` file, launch the datasciencebox on EC2
 (`vagrant up --provider=aws`) and ssh into it (`vagrant ssh`), then:
