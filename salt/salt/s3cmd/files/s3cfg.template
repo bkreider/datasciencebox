@@ -1,6 +1,16 @@
+{% set s3cmd = pillar.get('s3cmd', {}) %}
+
+{%- macro write_config(configname, default_value) -%}
+{%- if configname in s3cmd -%}
+{{ configname }} = {{ s3cmd[configname] }}
+{%- else -%}
+{{ configname }} = {{ default_value }}
+{%- endif -%}
+{%- endmacro -%}
+
 [default]
-access_key = {{ pillar['s3cmd']['access_key'] }}
-secret_key = {{ pillar['s3cmd']['secret_key'] }}
+{{ write_config('access_key', '') }}
+{{ write_config('secret_key', '') }}
 bucket_location = US
 cloudfront_host = cloudfront.amazonaws.com
 cloudfront_resource = /2010-07-15/distribution
