@@ -32,7 +32,6 @@ update-supervisor:
 
 ipnotebook:
   supervisord.running:
-    - conf_file: /etc/supervisor/supervisord.conf
     - restart: False
     - require:
       - file: ipnotebook.conf

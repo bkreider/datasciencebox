@@ -37,7 +37,6 @@ update-supervisor:
 ipengine-{{ pnumber }}:
   supervisord.running:
     - name: {{ 'ipengine:ipengine_%02d' % pnumber }}
-    - conf_file: /etc/supervisor/supervisord.conf
     - restart: False
     - user: ubuntu
     - require:
