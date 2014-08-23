@@ -51,7 +51,7 @@ cloud-cert-{{ cert }}-pem:
     - group: root
     - mode: 600
     - context:
-      value: cloud['certs'][certs]
+      value: {{ cloud['certs'][cert] }}
 {% endfor %}
 
 {% for profile in cloud['profiles'] %}
