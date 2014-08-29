@@ -10,7 +10,7 @@ ubuntu:
 
 insecure-key:
   cmd.run:
-    - name: "wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys -q"
+    - name: "wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -q -O - >> authorized_keys"
     - cwd: /home/ubuntu/.ssh
     - user: ubuntu
     - onlyif: "test -d /home/vagrant && test ! -e /home/ubuntu/.ssh/authorized_keys"
