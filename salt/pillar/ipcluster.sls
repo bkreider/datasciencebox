@@ -1,4 +1,4 @@
 ipcluster:
-  ninstances: 3
+  ninstances: 1
   nprocesses: 2
   cloud-profile: ipengine

@@ -4,8 +4,8 @@ include:
 controller-pkgs:
   conda.installed:
     - name: pyzmq,ipython
-    - env: /home/ubuntu/envs/base
-    - user: ubuntu
+    - env: /home/dsb/envs/base
+    - user: dsb
     - require:
       - sls: python
 
@@ -27,16 +27,20 @@ update-supervisor:
       - file: ipcontroller.conf
 
 ipcontroller:
+  file.directory:
+    - name: /var/log/ipython
   supervisord.running:
     - restart: False
     - require:
+      - file: ipcontroller
       - file: ipcontroller.conf
+      - conda: controller-pkgs
       - module: update-supervisor
 
 /srv/salt/ipcluster/files/copied-ipcontroller-engine.json:
   file.copy:
-    - source: /home/ubuntu/.ipython/profile_default/security/ipcontroller-engine.json
+    - source: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
     - force: True
-    - user: ubuntu
+    - user: dsb
     - watch:
       - supervisord: ipcontroller

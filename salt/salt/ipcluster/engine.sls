@@ -4,17 +4,17 @@ include:
 engine-pkgs:
   conda.installed:
     - name: pyzmq,ipython
-    - env: /home/ubuntu/envs/base
-    - user: ubuntu
+    - env: /home/dsb/envs/base
+    - user: dsb
     - require:
       - sls: python
 
 ipcontroller-engine.json:
   file.managed:
-    - name: /home/ubuntu/.ipython/profile_default/security/ipcontroller-engine.json
+    - name: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
     - source: salt://ipcluster/files/copied-ipcontroller-engine.json
     - makedirs: True
-    - user: ubuntu
+    - user: dsb
 
 ipengine.conf:
   pkg.installed:
@@ -35,12 +35,16 @@ update-supervisor:
 
 {% for pnumber in range(pillar['ipcluster']['nprocesses']) %}
 ipengine-{{ pnumber }}:
+  file.directory:
+    - name: /var/log/ipython
   supervisord.running:
     - name: {{ 'ipengine:ipengine_%02d' % pnumber }}
     - restart: False
-    - user: ubuntu
+    - user: dsb
     - require:
-      - conda: engine-pkgs
+      - file: ipengine-{{ pnumber }}
       - file: ipengine.conf
+      - conda: engine-pkgs
+      - module: update-supervisor
       - file: ipcontroller-engine.json
 {% endfor %}

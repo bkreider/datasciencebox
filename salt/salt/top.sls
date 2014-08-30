@@ -1,10 +1,8 @@
 base:
   'datasciencebox':
-    - user.ubuntu
-    - zsh.ubuntu
-    - s3cmd.ubuntu
+    - user.key
+    - user.zsh
+    - user.s3cmd
     - ipnotebook
-    # - salt.master
-    # - salt.cloud
   'ipengine-*':
     - ipcluster.engine

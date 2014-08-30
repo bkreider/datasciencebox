@@ -28,8 +28,7 @@ to the host.
 
 ### SSH
 
-1. Local VM `vagrant ssh -- -l ubuntu`
-2. EC2 instance: `vagrant ssh`
+`vagrant ssh`
 
 ## Settings
 

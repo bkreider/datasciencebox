@@ -1,15 +1,15 @@
 include:
   - python
 
-/home/ubuntu/notebooks:
+/home/dsb/notebooks:
   file.directory:
-    - user: ubuntu
+    - user: dsb
     - makedirs: True
 
 ipython-notebook:
   conda.installed:
-    - env: /home/ubuntu/envs/base
-    - user: ubuntu
+    - env: /home/dsb/envs/base
+    - user: dsb
     - require:
       - sls: python
 
@@ -31,8 +31,12 @@ update-supervisor:
       - file: ipnotebook.conf
 
 ipnotebook:
+  file.directory:
+    - name: /var/log/ipython
   supervisord.running:
     - restart: False
     - require:
+      - file: ipnotebook
       - file: ipnotebook.conf
+      - conda: ipython-notebook
       - module: update-supervisor

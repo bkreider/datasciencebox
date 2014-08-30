@@ -1,7 +1,7 @@
 ipython
-numpy
-scipy
-pandas
-scikit-learn
-matplotlib
-requests
+# numpy
+# scipy
+# pandas
+# scikit-learn
+# matplotlib
+# requests
