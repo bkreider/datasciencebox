@@ -1,4 +1,8 @@
 salt:
+  minion:
+    id: dsb-base
+    master: localhost
+
   master:
     {% macro master() %}{% include 'salt/master.sls' %}{% endmacro %}
     {{ master() | indent(width=4) }}
