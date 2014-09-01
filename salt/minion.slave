@@ -1,0 +1,14 @@
+id: dsb-slave
+master: 192.168.50.50
+
+grains:
+  roles:
+    - mesos-slave
+    - datanode
+
+mine_functions:
+  network.get_hostname: []
+  network.interfaces: []
+  network.ip_addrs:
+    - eth1
+mine_interval: 2

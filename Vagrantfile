@@ -5,32 +5,61 @@ VAGRANT_COMMAND = ARGV[0]
 Vagrant.configure("2") do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
-  # config.vm.box = "trusty64"
-  # config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
 
-  config.vm.hostname = 'datasciencebox'
-
-  if VAGRANT_COMMAND == "ssh"
-      config.ssh.username = 'dsb'
-  end
-
-  config.vm.network "forwarded_port", guest: 8888, host: 8888    # Notebook
-  config.vm.network "forwarded_port", guest: 50070, host: 50070  # NameNode
-  config.vm.network "forwarded_port", guest: 18080, host: 18080  # Spark
+  config.vm.network "private_network", type: "dhcp"
 
   config.vm.synced_folder "salt/", "/srv"
   config.vm.synced_folder '.', '/vagrant', disabled: true
-
-  config.vm.provision :salt do |salt|
-    salt.minion_config = "salt/minion"
-    salt.run_highstate = true
-    salt.verbose = true
-  end
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.memory = 2048
     vb.cpus = 2
+  end
+
+  config.vm.define "base", primary: true do |base|
+    base.vm.hostname = 'dsb-base'
+
+    if VAGRANT_COMMAND == "ssh"
+      base.ssh.username = 'dsb'
+    end
+
+    base.vm.network "private_network", ip: "192.168.50.50"
+    base.vm.network "forwarded_port", guest: 8888, host: 8888    # ipotebook
+    base.vm.network "forwarded_port", guest: 4505, host: 4505    # salt-master
+    base.vm.network "forwarded_port", guest: 4506, host: 4506    # salt-master
+
+    base.vm.provision :salt do |salt|
+      salt.minion_config = "salt/minion.base"
+      salt.run_highstate = true
+      salt.verbose = true
+    end
+  end
+
+  config.vm.define "master", autostart: false do |master|
+    master.vm.hostname = 'dsb-master'
+
+    master.vm.network "forwarded_port", guest: 2181, host: 2181    # zookeeper
+    master.vm.network "forwarded_port", guest: 5050, host: 5050    # mesos
+    master.vm.network "forwarded_port", guest: 8020, host: 8020    # hdfs
+    master.vm.network "forwarded_port", guest: 50070, host: 50070  # namenode
+    master.vm.network "forwarded_port", guest: 18080, host: 18080  # spark
+
+    master.vm.provision :salt do |salt|
+      salt.minion_config = "salt/minion.master"
+      salt.run_highstate = true
+      salt.verbose = true
+    end
+  end
+
+  config.vm.define "slave", autostart: false do |slave|
+    slave.vm.hostname = 'dsb-slave'
+
+    slave.vm.provision :salt do |salt|
+      salt.minion_config = "salt/minion.slave"
+      salt.run_highstate = true
+      salt.verbose = true
+    end
   end
 
   config.vm.provider :aws do |aws, override|
@@ -50,7 +79,7 @@ Vagrant.configure("2") do |config|
     aws.ami = AWS["ami"]
 
     if VAGRANT_COMMAND == "ssh"
-      config.ssh.username = 'dsb'
+      override.ssh.username = 'dsb'
     else
       override.ssh.username = AWS["username"]
     end
