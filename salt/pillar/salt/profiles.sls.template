@@ -3,5 +3,32 @@ ipengine:
   size: m3.large
   image: ami-018c9568
   ssh_username: ubuntu
+  # subnetid: ""  # VPC optional
+  securitygroupid:
+    - ""
+
+mesos-master:
+  provider: us-east-1d
+  size: m3.large
+  image: ami-018c9568
+  ssh_username: ubuntu
+  minion:
+    grains:
+      roles:
+        - mesos-master
+        - namenode
+  securitygroupid:
+    - ""
+
+mesos-slave:
+  provider: us-east-1d
+  size: m3.large
+  image: ami-018c9568
+  ssh_username: ubuntu
+  minion:
+    grains:
+      roles:
+        - mesos-slave
+        - datanode
   securitygroupid:
     - ""
