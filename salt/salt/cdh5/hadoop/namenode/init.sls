@@ -31,5 +31,6 @@ format-hdfs:
 start-hadoop-hdfs-namenode:
   service.running:
     - name: hadoop-hdfs-namenode
+    - enable: True
     - require:
       - cmd: format-hdfs

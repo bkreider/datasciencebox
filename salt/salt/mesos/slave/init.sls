@@ -11,6 +11,7 @@ mesos-slave-pkg:
 mesos-slave:
   service.running:
     - name: mesos-slave
+    - enable: True
     - require:
       - sls: mesos.conf
       - pkg: mesos-slave-pkg

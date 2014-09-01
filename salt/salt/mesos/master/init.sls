@@ -12,6 +12,7 @@ mesos-master-pkg:
 mesos-master:
   service.running:
     - name: mesos-master
+    - enable: True
     - require:
       - sls: mesos.conf
       - sls: cdh5.zookeeper

@@ -21,6 +21,7 @@ hadoop-hdfs-datanode:
 start-hadoop-hdfs-datanode:
   service.running:
     - name: hadoop-hdfs-datanode
+    - enable: True
     - require:
       {% for dir in datanode_dirs %}
       - file: {{ dir }}
