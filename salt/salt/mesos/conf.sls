@@ -1,6 +1,7 @@
 {%- from 'mesos/settings.sls' import master_fqdn with context %}
 
 include:
+  - mesos
   - hostsfile
 
 /etc/mesos/zk:
@@ -12,6 +13,6 @@ include:
     - makedirs: true
     - file_mode: 644
     - context:
-      master_host: {{ master_fqdn }}
+      zookeeper: {{ master_fqdn }}
     - require:
       - sls: hostsfile

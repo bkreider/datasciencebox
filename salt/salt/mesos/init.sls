@@ -12,3 +12,9 @@ mesos-apt:
     - name: pkg.refresh_db
     - require:
       - file: mesos-apt
+
+mesosphere-pkg:
+  pkg.installed:
+    - name: mesos
+    - require:
+      - module: mesos-apt

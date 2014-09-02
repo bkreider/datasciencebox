@@ -1,1 +1,1 @@
-zk://{{ master_host }}:2181/mesos
+zk://{{ zookeeper }}:2181/mesos
