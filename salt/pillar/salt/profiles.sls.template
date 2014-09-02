@@ -12,23 +12,37 @@ mesos-master:
   size: m3.large
   image: ami-018c9568
   ssh_username: ubuntu
+  securitygroupid:
+    - ""
+
   minion:
     grains:
       roles:
         - mesos-master
         - namenode
-  securitygroupid:
-    - ""
+    mine_functions:
+      network.get_hostname: '[]'
+      network.interfaces: '[]'
+      network.ip_addrs:
+        - eth1
+    mine_interval: 2
 
 mesos-slave:
   provider: us-east-1d
   size: m3.large
   image: ami-018c9568
   ssh_username: ubuntu
+  securitygroupid:
+    - ""
+
   minion:
     grains:
       roles:
         - mesos-slave
         - datanode
-  securitygroupid:
-    - ""
+    mine_functions:
+      network.get_hostname: '[]'
+      network.interfaces: '[]'
+      network.ip_addrs:
+        - eth1
+    mine_interval: 2
