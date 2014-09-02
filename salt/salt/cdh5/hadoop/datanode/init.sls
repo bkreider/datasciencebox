@@ -23,6 +23,8 @@ start-hadoop-hdfs-datanode:
     - name: hadoop-hdfs-datanode
     - enable: True
     - require:
+      - pkg: hadoop-hdfs-datanode
+      - sls: cdh5.hadoop.conf
       {% for dir in datanode_dirs %}
       - file: {{ dir }}
       {% endfor %}

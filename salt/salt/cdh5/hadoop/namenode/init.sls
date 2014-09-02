@@ -24,6 +24,8 @@ format-hdfs:
     - name: sudo -u hdfs hdfs namenode -format > /etc/hadoop/conf/hdfs-format-check-dont-delele.log
     - unless: test -e /etc/hadoop/conf/hdfs-format-check-dont-delele.log
     - require:
+      - pkg: hadoop-hdfs-namenode
+      - sls: cdh5.hadoop.conf
       {% for dir in namenode_dirs %}
       - file: {{ dir }}
       {% endfor %}
