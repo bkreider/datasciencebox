@@ -9,6 +9,7 @@
 #    - eth1
 #  mine_interval: 2
 
+{%- set force_mine_update = salt['mine.send']('network.ip_addrs') %}
 {%- set addrs = salt['mine.get']('*', 'network.ip_addrs') %}
 
 {%- if addrs is defined %}
@@ -23,4 +24,3 @@
 {% endfor %}
 
 {% endif %}
-
