@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
     base.vm.network "forwarded_port", guest: 8888, host: 8888    # ipotebook
     base.vm.network "forwarded_port", guest: 4505, host: 4505    # salt-master
     base.vm.network "forwarded_port", guest: 4506, host: 4506    # salt-master
+    base.vm.network "forwarded_port", guest: 4040, host: 4040      # spark
 
     base.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.base"
@@ -43,7 +44,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "forwarded_port", guest: 5050, host: 5050    # mesos
     master.vm.network "forwarded_port", guest: 8020, host: 8020    # hdfs
     master.vm.network "forwarded_port", guest: 50070, host: 50070  # namenode
-    master.vm.network "forwarded_port", guest: 18080, host: 18080  # spark
+    master.vm.network "forwarded_port", guest: 4040, host: 4041    # spark
 
     master.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.master"
