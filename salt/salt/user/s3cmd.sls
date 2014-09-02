@@ -1,3 +1,4 @@
+{% if pillar['s3cmd'] is defined %}
 include:
   - users
   - s3cmd
@@ -11,3 +12,4 @@ s3cmd-config:
     - mode: 0600
     - require:
       - sls: users
+{% endif %}
