@@ -2,8 +2,8 @@ base:
   'dsb-base':
     - user.key
     - user.zsh
-    # - user.s3cmd
-    # - ipnotebook
+    - user.s3cmd
+    - ipnotebook
 
   'ipengine-*':
     - ipcluster.engine
