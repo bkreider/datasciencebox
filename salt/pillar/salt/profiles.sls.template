@@ -3,11 +3,11 @@ ipython-engine:
   size: m3.large
   image: ami-018c9568
   ssh_username: ubuntu
-  # subnetid: ""  # VPC optional
   securitygroupid:
     - ""
 
   minion:
+    master: {{ grains['fqdn_ip4'][0] }}
     grains:
       roles:
         - ipython-engine
@@ -15,12 +15,13 @@ ipython-engine:
 mesos-master:
   provider: us-east-1d
   size: m3.large
-  image: ami-018c9568
+  image: ami-0145d268
   ssh_username: ubuntu
   securitygroupid:
     - ""
 
   minion:
+    master: {{ grains['fqdn_ip4'][0] }}
     grains:
       roles:
         - mesos-master
@@ -35,12 +36,13 @@ mesos-master:
 mesos-slave:
   provider: us-east-1d
   size: m3.large
-  image: ami-018c9568
+  image: ami-0145d268
   ssh_username: ubuntu
   securitygroupid:
     - ""
 
   minion:
+    master: {{ grains['fqdn_ip4'][0] }}
     grains:
       roles:
         - mesos-slave

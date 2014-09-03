@@ -1,7 +1,14 @@
 salt:
   minion:
-    id: dsb-base
+    id: dsb-master
     master: localhost
+
+    mine_functions:
+      network.get_hostname: '[]'
+      network.interfaces: '[]'
+      network.ip_addrs:
+        - eth1
+    mine_interval: 2
 
   master:
     auto_accept: True

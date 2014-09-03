@@ -4,7 +4,7 @@ salt-minion:
   pkg.installed:
     - name: {{ pkgs['salt-minion'] }}
   file.managed:
-    - name: /etc/salt/minion
+    - name: /etc/salt/minion2
     - template: jinja
     - source: salt://salt/files/minion
   service.running:

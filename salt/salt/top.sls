@@ -1,8 +1,13 @@
 base:
   'roles:notebook':
     - match: grain
-    - users
     - ipython.notebook
+
+  'roles:salt-master':
+    - match: grain
+    - salt.master
+    - salt.minion
+    - salt.cloud
 
   'roles:ipython-engine':
     - match: grain

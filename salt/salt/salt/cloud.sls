@@ -33,7 +33,7 @@ salt-cloud-provider-{{ provider }}:
   file.managed:
     - name: /etc/salt/cloud.providers.d/{{ provider }}.conf
     - template: jinja
-    - source: salt://salt/files/ec2.provider.conf
+    - source: salt://salt/files/provider.conf
     - makedirs: True
     - context:
       id: {{ provider }}
@@ -59,7 +59,7 @@ salt-cloud-profile-{{ profile }}:
   file.managed:
     - name: /etc/salt/cloud.profiles.d/{{ profile }}.conf
     - template: jinja
-    - source: salt://salt/files/ec2.profile.conf
+    - source: salt://salt/files/profile.conf
     - makedirs: True
     - context:
       id: {{ profile }}
