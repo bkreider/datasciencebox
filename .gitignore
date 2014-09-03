@@ -1,8 +1,10 @@
-aws.yml
 .vagrant
 
 *.slsc
+
+aws.yml
 salt/pillar/s3cmd.sls
+salt/pillar/ipcluster.sls
 salt/pillar/salt/certs.sls
 salt/pillar/salt/profiles.sls
 salt/pillar/salt/providers.sls

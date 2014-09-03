@@ -8,7 +8,7 @@ def run():
 
   Right now it only handles one level of depth
   '''
-  pillars = ['users', 'ipcluster', 's3cmd', 'salt', 'ipcluster', 'cdh5']
+  pillars = ['users', 's3cmd', 'salt', 'ipcluster']
   pillar_path = '/srv/pillar'
 
   matches = []

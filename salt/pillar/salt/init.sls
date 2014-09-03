@@ -1,6 +1,6 @@
 salt:
   minion:
-    id: dsb-base
+    id: dsb-master
     master: localhost
 
   master:

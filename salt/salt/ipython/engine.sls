@@ -12,7 +12,7 @@ engine-pkgs:
 ipcontroller-engine.json:
   file.managed:
     - name: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
-    - source: salt://ipcluster/files/copied-ipcontroller-engine.json
+    - source: salt://ipython/files/copied-ipcontroller-engine.json
     - makedirs: True
     - user: dsb
 
@@ -21,7 +21,7 @@ ipengine.conf:
     - name: supervisor
   file.managed:
     - name: /etc/supervisor/conf.d/ipengine.conf
-    - source: salt://ipcluster/files/ipengine.conf
+    - source: salt://ipython/files/ipengine.conf
     - template: jinja
     - makedirs: True
     - require:

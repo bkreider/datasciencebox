@@ -1,2 +1,6 @@
 id: dsb-base
 file_client: local
+
+grains:
+  roles:
+    - notebook

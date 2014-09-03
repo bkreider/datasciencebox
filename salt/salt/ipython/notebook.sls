@@ -18,7 +18,7 @@ ipnotebook.conf:
     - name: supervisor
   file.managed:
     - name: /etc/supervisor/conf.d/ipnotebook.conf
-    - source: salt://ipnotebook/files/supervisord.conf
+    - source: salt://ipython/files/notebook.conf
     - template: jinja
     - makedirs: True
     - require:

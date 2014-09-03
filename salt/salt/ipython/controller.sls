@@ -14,7 +14,7 @@ ipcontroller.conf:
     - name: supervisor
   file.managed:
     - name: /etc/supervisor/conf.d/ipcontroller.conf
-    - source: salt://ipcluster/files/ipcontroller.conf
+    - source: salt://ipython/files/ipcontroller.conf
     - template: jinja
     - makedirs: True
     - require:
@@ -37,7 +37,7 @@ ipcontroller:
       - conda: controller-pkgs
       - module: update-supervisor
 
-/srv/salt/ipcluster/files/copied-ipcontroller-engine.json:
+/srv/salt/ipython/files/copied-ipcontroller-engine.json:
   file.copy:
     - source: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
     - force: True

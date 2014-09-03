@@ -1,12 +1,13 @@
 base:
-  'dsb-base':
+  'roles:notebook':
+    - match: grain
     - user.key
     - user.zsh
     - user.s3cmd
-    - ipnotebook
+    - ipython.notebook
 
-  'ipengine-*':
-    - ipcluster.engine
+  'roles:ipython-engine':
+    - ipython.engine
 
   'roles:namenode':
     - match: grain
