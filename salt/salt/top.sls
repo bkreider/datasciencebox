@@ -7,6 +7,7 @@ base:
     - ipython.notebook
 
   'roles:ipython-engine':
+    - match: grain
     - ipython.engine
 
   'roles:namenode':
