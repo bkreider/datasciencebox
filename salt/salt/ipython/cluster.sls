@@ -8,7 +8,7 @@ include:
     - contents: |
         ipython-engine:
           {% for instance in range(instances) %}
-          - ipengine-{{ instance + 1 }}
+          - ipython-engine-{{ instance + 1 }}
           {% endfor %}
     - require:
       - sls: salt.master

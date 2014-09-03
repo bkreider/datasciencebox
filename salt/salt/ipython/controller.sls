@@ -1,7 +1,7 @@
 include:
   - python
 
-controller-pkgs:
+ipcontroller-pkgs:
   conda.installed:
     - name: pyzmq,ipython
     - env: /home/dsb/envs/base
@@ -14,33 +14,33 @@ ipcontroller.conf:
     - name: supervisor
   file.managed:
     - name: /etc/supervisor/conf.d/ipcontroller.conf
-    - source: salt://ipython/files/ipcontroller.conf
+    - source: salt://ipython/files/controller.conf
     - template: jinja
-    - makedirs: True
+    - makedirs: true
     - require:
       - pkg: ipcontroller.conf
 
-update-supervisor:
+ipcontroller-update-supervisor:
   module.run:
     - name: supervisord.update
     - watch:
       - file: ipcontroller.conf
 
-ipcontroller:
+ipcontroller-service:
   file.directory:
     - name: /var/log/ipython
   supervisord.running:
     - restart: False
     - require:
-      - file: ipcontroller
+      - conda: ipcontroller-pkgs
       - file: ipcontroller.conf
-      - conda: controller-pkgs
-      - module: update-supervisor
+      - module: ipcontroller-update-supervisor
+      - file: ipcontroller-service
 
 /srv/salt/ipython/files/copied-ipcontroller-engine.json:
   file.copy:
     - source: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
-    - force: True
+    - force: true
     - user: dsb
     - watch:
       - supervisord: ipcontroller

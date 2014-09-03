@@ -1,7 +1,7 @@
 include:
   - python
 
-engine-pkgs:
+ipengine-pkgs:
   conda.installed:
     - name: pyzmq,ipython
     - env: /home/dsb/envs/base
@@ -13,7 +13,7 @@ ipcontroller-engine.json:
   file.managed:
     - name: /home/dsb/.ipython/profile_default/security/ipcontroller-engine.json
     - source: salt://ipython/files/copied-ipcontroller-engine.json
-    - makedirs: True
+    - makedirs: true
     - user: dsb
 
 ipengine.conf:
@@ -21,22 +21,22 @@ ipengine.conf:
     - name: supervisor
   file.managed:
     - name: /etc/supervisor/conf.d/ipengine.conf
-    - source: salt://ipython/files/ipengine.conf
+    - source: salt://ipython/files/engine.conf
     - template: jinja
-    - makedirs: True
+    - makedirs: true
     - context:
       processes: {{ pillar['ipython']['cluster']['processes'] }}
     - require:
       - pkg: ipengine.conf
 
-update-supervisor:
+ipengine-update-supervisor:
   module.run:
     - name: supervisord.update
     - watch:
       - file: ipengine.conf
 
 {% for pnumber in range(pillar['ipython']['cluster']['processes']) %}
-ipengine-{{ pnumber }}:
+ipengine-{{ pnumber }}-service:
   file.directory:
     - name: /var/log/ipython
   supervisord.running:
@@ -44,9 +44,9 @@ ipengine-{{ pnumber }}:
     - restart: true
     - user: dsb
     - require:
-      - file: ipengine-{{ pnumber }}
+      - conda: ipengine-pkgs
       - file: ipengine.conf
-      - conda: engine-pkgs
-      - module: update-supervisor
+      - module: ipengine-update-supervisor
       - file: ipcontroller-engine.json
+      - file: ipengine-{{ pnumber }}-service
 {% endfor %}

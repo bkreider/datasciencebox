@@ -1,4 +1,4 @@
-ipyton-engine:
+ipython-engine:
   provider: us-east-1d
   size: m3.large
   image: ami-018c9568

@@ -4,7 +4,7 @@ include:
 /home/dsb/notebooks:
   file.directory:
     - user: dsb
-    - makedirs: True
+    - makedirs: true
 
 ipython-notebook:
   conda.installed:
@@ -13,30 +13,30 @@ ipython-notebook:
     - require:
       - sls: python
 
-ipnotebook.conf:
+notebook.conf:
   pkg.installed:
     - name: supervisor
   file.managed:
-    - name: /etc/supervisor/conf.d/ipnotebook.conf
+    - name: /etc/supervisor/conf.d/notebook.conf
     - source: salt://ipython/files/notebook.conf
     - template: jinja
-    - makedirs: True
+    - makedirs: true
     - require:
-      - pkg: ipnotebook.conf
+      - pkg: notebook.conf
 
-update-supervisor:
+notebook-update-supervisor:
   module.run:
     - name: supervisord.update
     - watch:
-      - file: ipnotebook.conf
+      - file: notebook.conf
 
-ipnotebook:
+notebook-service:
   file.directory:
     - name: /var/log/ipython
   supervisord.running:
     - restart: False
     - require:
-      - file: ipnotebook
-      - file: ipnotebook.conf
       - conda: ipython-notebook
-      - module: update-supervisor
+      - module: notebook-update-supervisor
+      - file: notebook.conf
+      - file: notebook-service
