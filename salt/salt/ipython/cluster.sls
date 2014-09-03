@@ -3,11 +3,19 @@ include:
   - salt.cloud
 
 {% set instances = pillar['ipython']['cluster']['instances'] %}
-{% for instance in range(instances) %}
-ipengine-{{ instance + 1 }}:
-  cloud.profile:
-    - profile: ipython-engine
+/etc/salt/cloud.maps.d/ipython-cluster.map:
+  file.managed:
+    - contents: |
+        ipython-engine:
+          {% for instance in range(instances) %}
+          - ipengine-{{ instance + 1 }}
+          {% endfor %}
     - require:
       - sls: salt.master
       - sls: salt.cloud
-{% endfor %}
+
+create-ipython-cluster:
+  cmd.run:
+    - name: salt-cloud -m /etc/salt/cloud.maps.d/ipython-cluster.map -P -y
+    - require:
+      - file: /etc/salt/cloud.maps.d/ipython-cluster.map

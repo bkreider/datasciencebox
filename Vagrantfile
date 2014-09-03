@@ -25,10 +25,10 @@ Vagrant.configure("2") do |config|
     end
 
     base.vm.network "private_network", ip: "192.168.50.50"
-    base.vm.network "forwarded_port", guest: 8888, host: 8888    # ipotebook
+    base.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
     base.vm.network "forwarded_port", guest: 4505, host: 4505    # salt-master
     base.vm.network "forwarded_port", guest: 4506, host: 4506    # salt-master
-    base.vm.network "forwarded_port", guest: 4040, host: 4040      # spark
+    base.vm.network "forwarded_port", guest: 4040, host: 4040    # spark
 
     base.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.base"

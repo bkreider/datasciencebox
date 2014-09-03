@@ -13,14 +13,14 @@ Optional:
 - [s3cmd](http://s3tools.org/s3cmd)
 - [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/) cluster creation
 - [Mesos](http://mesos.apache.org/) + [Spark](https://spark.apache.org/)
-cluester creation (beta)
+cluster creation (beta)
 
 ## Main box
 
 ### Local VM
 
-`vagrant up`, by default the IPython notebook port (8888) is forwarded
-to the host.
+`vagrant up`. The default IPython notebook port (8888) is forwarded
+to the host
 
 ### EC2
 
@@ -28,7 +28,7 @@ to the host.
 2. Copy the `aws.template.yml` file to `aws.yml` and fill the missing values
 3. `vagrant up --provider=aws`
 
-### SSH
+#### SSH
 
 `vagrant ssh`
 
@@ -118,7 +118,7 @@ From the main dsb box:
 2. On the main dsb box: `sudo salt-call state.sls ipython.controller`:
 starts the ipcontroller on the main box
 3. On the main dsb box: `sudo salt-call state.sls ipython.cluster`:
-creates instances
+creates instances in parallel
 4. On the main dsb box: `sudo salt 'roles:ipython-engine' -G state.highstate`:
 starts ipengine on the new instances
 
