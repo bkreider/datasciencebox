@@ -1,14 +1,9 @@
 id: dsb-master
-master: 192.168.50.50
+file_client: local
 
 grains:
   roles:
+    - salt-master
     - mesos-master
     - namenode
-
-mine_functions:
-  network.get_hostname: []
-  network.interfaces: []
-  network.ip_addrs:
-    - eth1
-mine_interval: 2
+    - notebook

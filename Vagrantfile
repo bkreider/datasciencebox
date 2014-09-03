@@ -24,11 +24,7 @@ Vagrant.configure("2") do |config|
       base.ssh.username = 'dsb'
     end
 
-    base.vm.network "private_network", ip: "192.168.50.50"
     base.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
-    base.vm.network "forwarded_port", guest: 4505, host: 4505    # salt-master
-    base.vm.network "forwarded_port", guest: 4506, host: 4506    # salt-master
-    base.vm.network "forwarded_port", guest: 4040, host: 4040    # spark
 
     base.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.base"
@@ -40,11 +36,19 @@ Vagrant.configure("2") do |config|
   config.vm.define "master", autostart: false do |master|
     master.vm.hostname = 'dsb-master'
 
-    master.vm.network "forwarded_port", guest: 2181, host: 2181    # zookeeper
-    master.vm.network "forwarded_port", guest: 5050, host: 5050    # mesos
-    master.vm.network "forwarded_port", guest: 8020, host: 8020    # hdfs
-    master.vm.network "forwarded_port", guest: 50070, host: 50070  # namenode
-    master.vm.network "forwarded_port", guest: 4040, host: 4041    # spark
+    if VAGRANT_COMMAND == "ssh"
+      master.ssh.username = 'dsb'
+    end
+
+    master.vm.network "private_network", ip: "192.168.50.50"
+    master.vm.network "forwarded_port", guest: 8888, host: 8888     # notebook
+    master.vm.network "forwarded_port", guest: 4505, host: 4505     # salt-master
+    master.vm.network "forwarded_port", guest: 4506, host: 4506     # salt-master
+    master.vm.network "forwarded_port", guest: 2181, host: 2181     # zookeeper
+    master.vm.network "forwarded_port", guest: 5050, host: 5050     # mesos
+    master.vm.network "forwarded_port", guest: 50070, host: 50070   # namenode
+    master.vm.network "forwarded_port", guest: 8020, host: 8020     # hdfs
+    master.vm.network "forwarded_port", guest: 4040, host: 4040     # spark
 
     master.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.master"
@@ -55,7 +59,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "slave", autostart: false do |slave|
     slave.vm.hostname = 'dsb-slave'
-
     slave.vm.provision :salt do |salt|
       salt.minion_config = "salt/minion.slave"
       salt.run_highstate = true
