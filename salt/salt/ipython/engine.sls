@@ -41,7 +41,7 @@ ipengine-{{ pnumber }}:
     - name: /var/log/ipython
   supervisord.running:
     - name: {{ 'ipengine:ipengine_%02d' % pnumber }}
-    - restart: False
+    - restart: true
     - user: dsb
     - require:
       - file: ipengine-{{ pnumber }}
