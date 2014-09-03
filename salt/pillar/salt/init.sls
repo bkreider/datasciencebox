@@ -1,11 +1,10 @@
 salt:
   minion:
-    id: dsb-master
+    id: dsb-base
     master: localhost
 
   master:
-    {% macro master() %}{% include 'salt/master.sls' %}{% endmacro %}
-    {{ master() | indent(width=4) }}
+    auto_accept: True
 
   cloud:
     providers:
