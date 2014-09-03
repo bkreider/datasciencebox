@@ -1,14 +1,19 @@
 base:
   'roles:notebook':
     - match: grain
-    - user.key
-    - user.zsh
-    - user.s3cmd
+    - users
     - ipython.notebook
 
   'roles:ipython-engine':
     - match: grain
     - ipython.engine
+
+  'roles:mesos-master':
+    - match: grain
+    - mesos.master
+  'roles:mesos-slave':
+    - match: grain
+    - mesos.slave
 
   'roles:namenode':
     - match: grain
@@ -17,10 +22,3 @@ base:
   'roles:datanode':
     - match: grain
     - cdh5.hadoop.datanode
-
-  'roles:mesos-master':
-    - match: grain
-    - mesos.master
-  'roles:mesos-slave':
-    - match: grain
-    - mesos.slave

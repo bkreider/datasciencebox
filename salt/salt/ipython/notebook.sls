@@ -34,6 +34,7 @@ notebook-service:
   file.directory:
     - name: /var/log/ipython
   supervisord.running:
+    - name: notebook
     - restart: False
     - require:
       - conda: ipython-notebook

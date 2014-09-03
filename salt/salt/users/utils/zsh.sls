@@ -1,10 +1,9 @@
 include:
   - users
-  - zsh
 
-dsb:
-  user.present:
-    - shell: /bin/zsh
+zsh:
+  pkg:
+    - installed
 
 oh-my-zsh:
   pkg.installed:
@@ -29,7 +28,7 @@ dot_zshrc:
 append-path:
   file.append:
     - name: /home/dsb/.zshrc
-    - text: "export PATH=/home/dbs/envs/base/bin:$PATH"
+    - text: "export PATH=/home/dsb/envs/base/bin:$PATH"
     - user: dsb
     - watch:
       - file: dot_zshrc

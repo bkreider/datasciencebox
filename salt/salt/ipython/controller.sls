@@ -30,6 +30,7 @@ ipcontroller-service:
   file.directory:
     - name: /var/log/ipython
   supervisord.running:
+    - name: ipcontroller
     - restart: False
     - require:
       - conda: ipcontroller-pkgs

@@ -8,6 +8,20 @@
 {%- endif -%}
 {%- set home = user.get('home', "/home/%s" % name) -%}
 
+include:
+  - users.utils.key
+{% if pillar['s3cmd'] is defined %}
+  - users.utils.s3cmd
+{% endif %}
+{% if user.get('shell') == '/bin/zsh' %}
+  - users.utils.zsh
+{% endif %}
+{% if 'sudouser' in user and user['sudouser'] %}
+{% if not used_sudo %}
+{% set used_sudo = True %}
+  - users.sudo
+{% endif %}
+
 {%- if 'prime_group' in user and 'name' in user['prime_group'] %}
 {%- set user_group = user.prime_group.name -%}
 {%- else -%}
@@ -40,7 +54,7 @@
   user.present:
     - name: {{ name }}
     - home: {{ home }}
-    - shell: {{ users.get('visudo_shell', '/bin/bash') }}
+    - shell: {{ user.get('shell', '/bin/bash') }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
     {% endif -%}
@@ -135,18 +149,11 @@ ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
-{% if 'sudouser' in user and user['sudouser'] %}
-{% if not used_sudo %}
-{% set used_sudo = True %}
-include:
-  - users.sudo
-{% endif %}
-
 sudoer-{{ name }}:
   file.managed:
     - name: {{ users.sudoers_dir }}{{ name }}
     - user: root
-    - group: {{ users.root_group }} 
+    - group: {{ users.root_group }}
     - mode: '0440'
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
@@ -154,7 +161,7 @@ sudoer-{{ name }}:
   cmd.run:
     - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
     - stateful: True
-    - shell: {{ users.visudo_shell }} 
+    - shell: {{ users.visudo_shell }}
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
@@ -210,4 +217,3 @@ sudoer-{{ name }}:
 {{ group }}:
   group.absent
 {% endfor %}
-
