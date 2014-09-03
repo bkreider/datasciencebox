@@ -24,6 +24,8 @@ ipengine.conf:
     - source: salt://ipython/files/ipengine.conf
     - template: jinja
     - makedirs: True
+    - context:
+      processes: {{ pillar['ipython']['cluster']['processes'] }}
     - require:
       - pkg: ipengine.conf
 
@@ -33,7 +35,7 @@ update-supervisor:
     - watch:
       - file: ipengine.conf
 
-{% for pnumber in range(pillar['ipcluster']['nprocesses']) %}
+{% for pnumber in range(pillar['ipython']['cluster']['processes']) %}
 ipengine-{{ pnumber }}:
   file.directory:
     - name: /var/log/ipython

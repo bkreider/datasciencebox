@@ -2,11 +2,11 @@ include:
   - salt.master
   - salt.cloud
 
-{% set ninstances = salt['pillar.get']('ipcluster')['ninstances'] %}
-{% for instance in range(ninstances) %}
+{% set instances = pillar['ipython']['cluster']['instances'] %}
+{% for instance in range(instances) %}
 ipengine-{{ instance + 1 }}:
   cloud.profile:
-    - profile: {{ salt['pillar.get']('ipcluster')['cloud-profile'] }}
+    - profile: ipython-engine
     - require:
       - sls: salt.master
       - sls: salt.cloud

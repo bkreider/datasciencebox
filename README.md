@@ -48,40 +48,30 @@ on the box.
 
 Change the `salt/salt/python/requirements.txt` file.
 
+### salt-master
+
+To convert the main dsb box to a salt master that is able to control minions do:
+
+1. `sudo salt-call state.sls salt.master`
+2. `sudo salt-call state.sls salt.minion`
+
 ### salt-cloud
 
+`salt-cloud` allows the creation of instances.
 You need to fill the 3 files in the `salt/pillar/salt` directory, each file has
 a template with basic defaults:
 
 1. `certs.sls`: AWS private key used to create the instances
-1. `providers.sls`: AWS credentials, key_pair name and cert name (#1)
-1. `profiles.sls`: Provider name (#2), image size, base image and security group
+2. `providers.sls`: AWS credentials, key_pair name and cert name (#1)
+3. `profiles.sls`: Provider name (#2), image size, base image and security group
 
-On the main dsb instance do:
-
-1. `sudo salt-call state.sls salt.master`
-1. `sudo salt-call state.sls salt.cloud`
-1. `sudo salt-call state.sls salt.minion`
+On the main dsb box do: `sudo salt-call state.sls salt.cloud`
 
 ## Mesos
 
-### Local
-
-Mainly used for development of the states
-
-1. `vagrant up --provider=aws`, `vagrant ssh` and
-`sudo salt-call state.sls salt.master`.
-2. `vagrant up master` starts a box with the namenode, zookeeper and mesos-master
-3. Add a line to the `/etc/hosts` of the host machine containing the ip of the
-dsb-master like this: `172.28.128.4        dsb-master`
-3. `vagrant up slave` starts a box with the datanode and mesos-slave
-
-Check on the host machine you should be able to see:
-[Mesos UI](http://localhost:5050) and the [Namenode UI](http://localhost:50070)
-
 ### Cloud
 
-**Requires**: [salt-cloud](#salt-cloud) config
+**Requires**: [salt-master](#salt-cloud) and [salt-cloud](#salt-cloud)
 
 1. Start dsb main instance:
 `vagrant up --provider=aws`, `vagrant ssh` and `sudo salt-call state.sls salt.master`
@@ -93,6 +83,21 @@ Check on the host machine you should be able to see:
 `sudo salt-cloud -p mesos-slave mesos-slave-1`
 5. Provision worker instances:
 `sudo salt 'roles:mesos-slave' -G state.highstate`
+
+### Local
+
+Mainly used for development of the states since its only possible to have one
+mesos slave.
+
+1. `vagrant up --provider=aws`, `vagrant ssh` and
+`sudo salt-call state.sls salt.master`.
+2. `vagrant up master` starts a box with the namenode, zookeeper and mesos-master
+3. Add a line to the `/etc/hosts` of the host machine containing the ip of the
+dsb-master like this: `172.28.128.4        dsb-master`
+3. `vagrant up slave` starts a box with the datanode and mesos-slave
+
+Check on the host machine you should be able to see:
+[Mesos UI](http://localhost:5050) and the [Namenode UI](http://localhost:50070)
 
 ### Spark
 
@@ -107,14 +112,15 @@ From the main dsb box:
 
 ## IPython.parallel cluster
 
-**Requires**: [salt-cloud](#salt-cloud) config
+**Requires**: [salt-cloud](#salt-cloud)
 
-Fill/change the `salt/pillar/ipcluster.sls` file, launch the datasciencebox on EC2
-(`vagrant up --provider=aws`) and ssh into it (`vagrant ssh`), then:
-
-1. `sudo salt-call state.sls ipcluster.instances`: creates instances
-2. `sudo salt-call state.sls ipcluster.controller`: start the ipcontroller on the main instance
-3. `sudo salt 'ipengine-*' state.highstate`: start ipengine on worker instances
+1. Change the `cluster` section on the `salt/pillar/ipython.sls` file
+2. On the main dsb box: `sudo salt-call state.sls ipython.controller`:
+starts the ipcontroller on the main box
+3. On the main dsb box: `sudo salt-call state.sls ipython.cluster`:
+creates instances
+4. On the main dsb box: `sudo salt 'roles:ipython-engine' -G state.highstate`:
+starts ipengine on the new instances
 
 Everyting is ready, see [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/)
 for more information on how to use it.
