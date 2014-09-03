@@ -48,13 +48,6 @@ on the box.
 
 Change the `salt/salt/python/requirements.txt` file.
 
-### salt-master
-
-To convert the main dsb box to a salt master that is able to control minions do:
-
-1. `sudo salt-call state.sls salt.master`
-2. `sudo salt-call state.sls salt.minion`
-
 ### salt-cloud
 
 `salt-cloud` allows the creation of instances.
@@ -71,7 +64,7 @@ On the main dsb box do: `sudo salt-call state.sls salt.cloud`
 
 ### Cloud
 
-**Requires**: [salt-master](#salt-cloud) and [salt-cloud](#salt-cloud)
+**Requires**: [salt-cloud](#salt-cloud)
 
 1. Start dsb main instance:
 `vagrant up --provider=aws`, `vagrant ssh` and `sudo salt-call state.sls salt.master`
