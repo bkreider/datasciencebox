@@ -12,3 +12,4 @@ base:
     - user: dsb
     - require:
       - sls: conda
+      - sls: users

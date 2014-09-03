@@ -66,16 +66,12 @@ On the main dsb box do: `sudo salt-call state.sls salt.cloud`
 
 **Requires**: [salt-cloud](#salt-cloud)
 
-1. Start dsb main instance:
-`vagrant up --provider=aws`, `vagrant ssh` and `sudo salt-call state.sls salt.master`
-2. Start master instance: mesos-master and namenode:
-`sudo salt-cloud -p mesos-master mesos-master`
-3. Provison master intance:
-`sudo salt 'roles:mesos-master' -G state.highstate`
-4. Start worker instances: mesos-slave and datanode:
-`sudo salt-cloud -p mesos-slave mesos-slave-1`
-5. Provision worker instances:
-`sudo salt 'roles:mesos-slave' -G state.highstate`
+1. On the main dsb box: `sudo salt-call state.sls mesos.cluster`:
+creates instances in parallel
+2. On the main dsb box: `sudo salt 'roles:mesos-master' -G state.highstate`
+Provison master intance
+3. On the main dsb box: `sudo salt 'roles:mesos-slave' -G state.highstate`
+Provision slave instances
 
 ### Local
 
@@ -94,14 +90,19 @@ Check on the host machine you should be able to see:
 
 ### Spark
 
-**Requires**: Mesos local or mesos in the cloud
+**Requires**: [Mesos](#mesos)
 
 From the main dsb box:
 
-1. Download spark on the master node ad put the spark `tgz` in  hdfs:
+1. Download spark on the master node and put the spark `tgz` in  hdfs:
 `sudo salt 'roles:mesos-master' -G state.sls mesos.spark`
 2. Install spark and mesos on the main box (notebook):
+`sudo salt-call state.sls salt.minion` and
 `sudo salt-call state.sls mesos.spark.conf`
+3. (optional) Install the python enviroment in all the slaves:
+`sudo salt 'roles:mesos-slave' -G state.sls python`
+4. Restart IPython.notebook:
+`sudo salt-call state.sls ipython.notebook`
 
 ## IPython.parallel cluster
 

@@ -1,5 +1,6 @@
 ipython
-# numpy
+numpy
+nltk
 # scipy
 # pandas
 # scikit-learn

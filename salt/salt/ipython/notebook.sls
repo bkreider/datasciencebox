@@ -35,7 +35,7 @@ notebook-service:
     - name: /var/log/ipython
   supervisord.running:
     - name: notebook
-    - restart: False
+    - restart: true
     - require:
       - conda: ipython-notebook
       - module: notebook-update-supervisor
