@@ -10,7 +10,7 @@ spark-hdfs:
   cmd.run:
     - name: |
         cp -r /usr/lib/spark /tmp/{{ version }};
-        tar zcf /tmp/{{ version }}.tgz /tmp/{{ version }};
+        tar czf /tmp/{{ version }}.tgz /tmp/{{ version }};
         hadoop fs -put /tmp/{{ version }}.tgz /tmp;
         # rm -rf /tmp/{{ version }}.tgz /tmp/{{ version }};
     - user: hdfs

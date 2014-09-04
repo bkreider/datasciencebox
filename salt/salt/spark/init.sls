@@ -8,8 +8,8 @@ include:
 download-spark:
   cmd.run:
     - name: |
-        wget {{ source_url }} -O /tmp/{{ version }}.tgz > /dev/null 2>&1;
-        tar -xvf /tmp/{{ version }}.tgz && mv {{ version }} spark > /dev/null 2>&1;
+        wget {{ source_url }} -O /tmp/{{ version }}.tgz -q;
+        tar -xf /tmp/{{ version }}.tgz && mv {{ version }} spark;
     - cwd: /usr/lib
     - unless: test -e /usr/lib/spark
     - require:
