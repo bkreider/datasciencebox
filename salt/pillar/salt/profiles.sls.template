@@ -5,6 +5,7 @@ ipython-engine:
   ssh_username: ubuntu
   securitygroupid:
     - ""
+  # subnetid: "" # VPC optional
 
   minion:
     master: {{ grains['fqdn_ip4'][0] }}
