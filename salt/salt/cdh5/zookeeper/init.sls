@@ -1,12 +1,12 @@
 include:
   - java
-  - cdh5.repo
+  - cdh5
 
 zookeeper-pkg:
   pkg.installed:
     - name: zookeeper-server
     - require:
-      - sls: cdh5.repo
+      - sls: cdh5
 
 zookeeper:
   cmd.run:

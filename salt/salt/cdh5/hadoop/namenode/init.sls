@@ -2,13 +2,13 @@
 
 include:
   - java
-  - cdh5.repo
+  - cdh5
   - cdh5.hadoop.conf
 
 hadoop-hdfs-namenode:
   pkg.installed:
     - require:
-      - sls: cdh5.repo
+      - sls: cdh5
 
 {% for dir in namenode_dirs %}
 {{ dir }}:
@@ -33,6 +33,6 @@ format-hdfs:
 start-hadoop-hdfs-namenode:
   service.running:
     - name: hadoop-hdfs-namenode
-    - enable: True
+    - enable: true
     - require:
       - cmd: format-hdfs

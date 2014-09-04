@@ -2,13 +2,13 @@
 
 include:
   - java
-  - cdh5.repo
+  - cdh5
   - cdh5.hadoop.conf
 
 hadoop-hdfs-datanode:
   pkg.installed:
     - require:
-      - sls: cdh5.repo
+      - sls: cdh5
 
 {% for dir in datanode_dirs %}
 {{ dir }}:
@@ -21,7 +21,7 @@ hadoop-hdfs-datanode:
 start-hadoop-hdfs-datanode:
   service.running:
     - name: hadoop-hdfs-datanode
-    - enable: True
+    - enable: true
     - require:
       - pkg: hadoop-hdfs-datanode
       - sls: cdh5.hadoop.conf
