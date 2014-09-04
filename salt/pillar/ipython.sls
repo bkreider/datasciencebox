@@ -3,5 +3,5 @@ ipython:
     port: 8888
 
   cluster:
-    instances: 2
+    instances: 1
     processes: 2  # per instance
