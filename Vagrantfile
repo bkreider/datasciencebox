@@ -17,17 +17,17 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
   end
 
-  config.vm.define "base", primary: true do |base|
-    base.vm.hostname = 'dsb-base'
+  config.vm.define "single", primary: true do |single|
+    single.vm.hostname = 'dsb-single'
 
     if VAGRANT_COMMAND == "ssh"
-      base.ssh.username = 'dsb'
+      single.ssh.username = 'dsb'
     end
 
-    base.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
+    single.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
 
-    base.vm.provision :salt do |salt|
-      salt.minion_config = "salt/minion.base"
+    single.vm.provision :salt do |salt|
+      salt.minion_config = "salt/minion.single"
       salt.run_highstate = true
       salt.verbose = true
     end
