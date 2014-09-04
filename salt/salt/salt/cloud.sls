@@ -17,6 +17,8 @@ crypto:
 
 apache-libcloud:
   pip.installed:
+    - name: apache-libcloud
+    - bin_env: /usr/bin/pip
     - require:
       - pkg: python-pip
 
