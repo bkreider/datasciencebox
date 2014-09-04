@@ -1,36 +1,27 @@
 # DataScienceBox
 
-My personal data science box based on [salt](http://www.saltstack.com/) and
-[Vagrant](http://vagrantup.com/) to easily create cloud instances or local VMs
-ready for doing data science.
+Data science box based on [salt](http://www.saltstack.com/) and
+[Vagrant](http://vagrantup.com/) to easily create cloud instances.
 
-- Ubuntu 12.04
-- Python 2.7.8 packages based on [Anaconda](http://continuum.io/downloads)
-- [IPython notebook](http://ipython.org/notebook.html) running in port 8888
+There are two types of instances the single and the master
 
-Optional:
+- Single dsb is a python enviroment based on
+[Anaconda](http://continuum.io/downloads) packages.
+The IPython notebook is available at port 8888.
+- Master dsb = single dsb + salt-master + HDFS namenode + mesos-master.
+Allows the creation of mesos-slaves that can be used to use spark.
 
-- [s3cmd](http://s3tools.org/s3cmd)
-- [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/) cluster creation
-- [Mesos](http://mesos.apache.org/) + [Spark](https://spark.apache.org/)
-cluster creation (beta)
+**Requisites**:
 
-## Main box
+1. [Vagrant](https://www.vagrantup.com/downloads.html)
+2. Vagrant aws plugin: `vagrant plugin install vagrant-aws`
+3. Copy the `aws.template.yml` file to `aws.yml` and fill the missing values
 
-### Local VM
+## Single
 
-`vagrant up`. The default IPython notebook port (8888) is forwarded
-to the host
+Create instance: `vagrant up --provider=aws`
 
-### EC2
-
-1. Install vagrant aws plugin: `vagrant plugin install vagrant-aws`
-2. Copy the `aws.template.yml` file to `aws.yml` and fill the missing values
-3. `vagrant up --provider=aws`
-
-#### SSH
-
-`vagrant ssh`
+SSH: `vagrant ssh`
 
 ## Settings
 
@@ -58,50 +49,31 @@ a template with basic defaults:
 2. `providers.sls`: AWS credentials, key_pair name and cert name (#1)
 3. `profiles.sls`: Provider name (#2), image size, base image and security group
 
-On the main dsb box do: `sudo salt-call state.sls salt.cloud`
+## Master
 
-## Mesos
+**Note**: This requires ubuntu 12.04
 
-### Cloud
+Create instance: `vagrant up master --provider=aws`
+
+SSH: `vagrant ssh master`
+
+### Slaves
 
 **Requires**: [salt-cloud](#salt-cloud)
 
-1. On the main dsb box: `sudo salt-call state.sls mesos.cluster`:
-creates instances in parallel
-2. On the main dsb box: `sudo salt 'roles:mesos-master' -G state.highstate`
-Provison master intance
-3. On the main dsb box: `sudo salt 'roles:mesos-slave' -G state.highstate`
-Provision slave instances
-
-### Local
-
-Mainly used for development of the states since its only possible to have one
-mesos slave.
-
-1. `vagrant up --provider=aws`, `vagrant ssh` and
-`sudo salt-call state.sls salt.master`.
-2. `vagrant up master` starts a box with the namenode, zookeeper and mesos-master
-3. Add a line to the `/etc/hosts` of the host machine containing the ip of the
-dsb-master like this: `172.28.128.4        dsb-master`
-3. `vagrant up slave` starts a box with the datanode and mesos-slave
-
-Check on the host machine you should be able to see:
-[Mesos UI](http://localhost:5050) and the [Namenode UI](http://localhost:50070)
+2. `vagrant ssh master`
+3. `sudo salt-call state.sls mesos.cluster`:
+creates slaves in parallel
+4. `sudo salt 'roles:mesos-slave' -G state.highstate`:
+provision slave instances
 
 ### Spark
 
-**Requires**: [Mesos](#mesos)
-
-From the main dsb box:
-
-1. Download spark on the master node and put the spark `tgz` in  hdfs:
-`sudo salt 'roles:mesos-master' -G state.sls mesos.spark`
-2. Install spark and mesos on the main box (notebook):
-`sudo salt-call state.sls salt.minion` and
-`sudo salt-call state.sls mesos.spark.conf`
+1. `sudo salt-call state.sls mesos.spark`:
+Download spark and put the spark `tgz` in  hdfs:
 3. (optional) Install the python enviroment in all the slaves:
 `sudo salt 'roles:mesos-slave' -G state.sls python`
-4. Restart IPython.notebook:
+4. (optional) To use pyspark on the notebook it needs to be restarted:
 `sudo salt-call state.sls ipython.notebook`
 
 ## IPython.parallel cluster
@@ -109,11 +81,12 @@ From the main dsb box:
 **Requires**: [salt-cloud](#salt-cloud)
 
 1. Change the `cluster` section on the `salt/pillar/ipython.sls` file
-2. On the main dsb box: `sudo salt-call state.sls ipython.controller`:
+2. SSH to the dsb box
+2. `sudo salt-call state.sls ipython.controller`:
 starts the ipcontroller on the main box
-3. On the main dsb box: `sudo salt-call state.sls ipython.cluster`:
+3. `sudo salt-call state.sls ipython.cluster`:
 creates instances in parallel
-4. On the main dsb box: `sudo salt 'roles:ipython-engine' -G state.highstate`:
+4. `sudo salt 'roles:ipython-engine' -G state.highstate`:
 starts ipengine on the new instances
 
 Everyting is ready, see [IPython.parallel](http://ipython.org/ipython-doc/dev/parallel/)
