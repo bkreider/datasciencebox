@@ -4,7 +4,7 @@ include:
 mesos-slave:
   service.running:
     - name: mesos-slave
-    - enable: True
+    - enable: true
     - require:
       - sls: mesos.conf
 

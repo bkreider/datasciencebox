@@ -5,7 +5,7 @@ include:
 mesos-master:
   service.running:
     - name: mesos-master
-    - enable: True
+    - enable: true
     - require:
       - sls: mesos.conf
       - sls: cdh5.zookeeper
