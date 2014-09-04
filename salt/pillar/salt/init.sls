@@ -10,6 +10,13 @@ salt:
         - eth1
     mine_interval: 2
 
+    grains:
+      roles:
+        - salt-master
+        - mesos-master
+        - namenode
+        - notebook
+
   master:
     auto_accept: True
 
