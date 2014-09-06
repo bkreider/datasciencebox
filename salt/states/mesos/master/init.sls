@@ -1,4 +1,5 @@
 include:
+  - users
   - mesos.conf
   - cdh5.zookeeper
 

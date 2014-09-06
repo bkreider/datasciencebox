@@ -1,8 +1,8 @@
 ipython
 numpy
 nltk
+# requests
 # scipy
 # pandas
 # scikit-learn
 # matplotlib
-# requests

@@ -64,11 +64,11 @@ SSH: `vagrant ssh master`
 1. `vagrant ssh master`
 2. `sudo salt-call state.sls mesos.cluster`:
 creates slaves in parallel
-3. `sudo salt 'roles:mesos-slave' -G state.highstate`:
-provision slave instances
-4. Add minions ipaddresses to the hostsfile:
+3. Add minion ipaddresses to the hostsfile:
 `sudo salt '*' mine.send network.ip_addrs` and
 `sudo salt '*' state.sls hostsfile`
+4. `sudo salt 'roles:mesos-slave' -G state.highstate`:
+provision slave instances
 
 ### Spark
 

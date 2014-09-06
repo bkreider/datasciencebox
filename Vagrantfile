@@ -6,9 +6,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
+  if VAGRANT_COMMAND == "ssh"
+    config.ssh.username = 'dsb'
+  end
+
   config.vm.network "private_network", type: "dhcp"
 
-  config.vm.synced_folder "salt/", "/srv"
+  config.vm.synced_folder "salt/states", "/srv/salt"
+  config.vm.synced_folder "salt/pillar", "/srv/pillar"
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   config.vm.provider :virtualbox do |vb|
@@ -19,10 +24,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "single", primary: true do |single|
     single.vm.hostname = 'dsb-single'
-
-    if VAGRANT_COMMAND == "ssh"
-      single.ssh.username = 'dsb'
-    end
 
     single.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
 
@@ -35,10 +36,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "master", autostart: false do |master|
     master.vm.hostname = 'dsb-master'
-
-    if VAGRANT_COMMAND == "ssh"
-      master.ssh.username = 'dsb'
-    end
 
     master.vm.network "private_network", ip: "192.168.50.50"
     master.vm.network "forwarded_port", guest: 8888, host: 8888     # notebook
