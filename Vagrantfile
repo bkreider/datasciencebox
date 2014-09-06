@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", type: "dhcp"
 
-  config.vm.synced_folder "salt/states", "/srv/salt"
+  config.vm.synced_folder "salt/salt", "/srv/salt"
   config.vm.synced_folder "salt/pillar", "/srv/pillar"
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
