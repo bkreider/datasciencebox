@@ -34,9 +34,8 @@ ipcontroller-service:
     - restart: False
     - require:
       - conda: ipcontroller-pkgs
-      - file: ipcontroller.conf
-      - module: ipcontroller-update-supervisor
       - file: ipcontroller-service
+      - module: ipcontroller-update-supervisor
 
 /srv/salt/ipython/files/copied-ipcontroller-engine.json:
   file.copy:

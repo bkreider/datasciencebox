@@ -45,7 +45,6 @@ ipengine-{{ pnumber }}-service:
     - user: dsb
     - require:
       - conda: ipengine-pkgs
-      - file: ipengine.conf
       - module: ipengine-update-supervisor
       - file: ipcontroller-engine.json
       - file: ipengine-{{ pnumber }}-service

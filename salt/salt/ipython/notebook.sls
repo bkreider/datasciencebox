@@ -37,7 +37,6 @@ notebook-service:
     - name: notebook
     - restart: true
     - require:
+      - file: notebook-service
       - conda: ipython-notebook
       - module: notebook-update-supervisor
-      - file: notebook.conf
-      - file: notebook-service
