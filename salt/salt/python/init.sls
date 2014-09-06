@@ -1,6 +1,7 @@
 include:
   - users
   - conda
+  - python.nltk
 
 base:
   pkg.installed:
