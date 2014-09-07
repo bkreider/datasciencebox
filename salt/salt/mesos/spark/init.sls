@@ -12,7 +12,6 @@ spark-hdfs:
         cp -r /usr/lib/spark /tmp/{{ version }};
         tar czf /tmp/{{ version }}.tgz /tmp/{{ version }};
         hadoop fs -put /tmp/{{ version }}.tgz /tmp;
-        # rm -rf /tmp/{{ version }}.tgz /tmp/{{ version }};
     - user: hdfs
     - unless: hadoop fs -test -e /tmp/{{ version }}.tgz
     - require:
