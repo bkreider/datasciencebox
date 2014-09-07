@@ -9,3 +9,5 @@ salt/pillar/salt/profiles.sls
 salt/pillar/salt/providers.sls
 
 copied-ipcontroller-engine.json
+
+notebooks
