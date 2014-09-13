@@ -1,9 +1,0 @@
-id: dsb-master
-file_client: local
-
-grains:
-  roles:
-    - salt-master
-    - mesos-master
-    - namenode
-    - notebook

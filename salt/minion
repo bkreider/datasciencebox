@@ -1,4 +1,4 @@
-id: dsb-base
+id: dsb
 file_client: local
 
 grains:

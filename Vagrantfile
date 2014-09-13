@@ -22,33 +22,22 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
   end
 
-  config.vm.define "single", primary: true do |single|
-    single.vm.hostname = 'dsb-single'
+  config.vm.define "default", primary: true do |config|
+    config.vm.hostname = 'dsb'
 
-    single.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
+    config.vm.network "private_network", ip: "192.168.50.50"
+    config.vm.network "forwarded_port", guest: 8888, host: 8888    # notebook
+    config.vm.network "forwarded_port", guest: 8888, host: 8888     # notebook
+    config.vm.network "forwarded_port", guest: 4505, host: 4505     # salt-master
+    config.vm.network "forwarded_port", guest: 4506, host: 4506     # salt-master
+    config.vm.network "forwarded_port", guest: 2181, host: 2181     # zookeeper
+    config.vm.network "forwarded_port", guest: 5050, host: 5050     # mesos
+    config.vm.network "forwarded_port", guest: 50070, host: 50070   # namenode
+    config.vm.network "forwarded_port", guest: 8020, host: 8020     # hdfs
+    config.vm.network "forwarded_port", guest: 4040, host: 4040     # spark
 
-    single.vm.provision :salt do |salt|
-      salt.minion_config = "salt/minion.single"
-      salt.run_highstate = true
-      salt.verbose = true
-    end
-  end
-
-  config.vm.define "master", autostart: false do |master|
-    master.vm.hostname = 'dsb-master'
-
-    master.vm.network "private_network", ip: "192.168.50.50"
-    master.vm.network "forwarded_port", guest: 8888, host: 8888     # notebook
-    master.vm.network "forwarded_port", guest: 4505, host: 4505     # salt-master
-    master.vm.network "forwarded_port", guest: 4506, host: 4506     # salt-master
-    master.vm.network "forwarded_port", guest: 2181, host: 2181     # zookeeper
-    master.vm.network "forwarded_port", guest: 5050, host: 5050     # mesos
-    master.vm.network "forwarded_port", guest: 50070, host: 50070   # namenode
-    master.vm.network "forwarded_port", guest: 8020, host: 8020     # hdfs
-    master.vm.network "forwarded_port", guest: 4040, host: 4040     # spark
-
-    master.vm.provision :salt do |salt|
-      salt.minion_config = "salt/minion.master"
+    config.vm.provision :salt do |salt|
+      salt.minion_config = "salt/minion"
       salt.run_highstate = true
       salt.verbose = true
     end

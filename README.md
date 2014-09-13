@@ -3,23 +3,16 @@
 Data science box based on [salt](http://www.saltstack.com/) and
 [Vagrant](http://vagrantup.com/) to easily create cloud instances.
 
-There are two types of instances the single and the master
-
-- Single dsb is a python enviroment based on
-[Anaconda](http://continuum.io/downloads) packages.
-The IPython notebook is available at port 8888.
-- Master dsb = single dsb + salt-master + HDFS namenode + mesos-master.
-Allows the creation of mesos-slaves that can be used to use spark.
-
 **Requisites**:
 
 1. [Vagrant](https://www.vagrantup.com/downloads.html)
 2. Vagrant aws plugin: `vagrant plugin install vagrant-aws`
 3. Copy the `aws.template.yml` file to `aws.yml` and fill the missing values
+4. (optional) python fabric
 
-## Single
+## Start instance
 
-Create instance: `vagrant up --provider=aws`
+`vagrant up --provider=aws`
 
 SSH: `vagrant ssh`
 
@@ -53,15 +46,13 @@ a template with basic defaults:
 
 **Note**: This requires ubuntu 12.04
 
-Create instance: `vagrant up master --provider=aws`
-
-SSH: `vagrant ssh master`
+`fab make_master`
 
 ### Slaves
 
 **Requires**: [salt-cloud](#salt-cloud)
 
-1. `vagrant ssh master`
+1. `vagrant ssh`
 2. `sudo salt-call state.sls mesos.cluster`:
 creates slaves in parallel
 3. Add minion ipaddresses to the hostsfile:
